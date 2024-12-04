@@ -30,7 +30,17 @@ class ExpensesList extends StatelessWidget {
           margin: const EdgeInsets.only(left:10, right:10, top: 10),
           // padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.grey[200]
+            color: Colors.white,
+            border: Border.all(color: Colors.grey, width: 0.1),
+            borderRadius: BorderRadius.circular(15),
+            // put shadow 
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                offset: const Offset(2.0, 2.0),
+                blurRadius: 5.0,
+              ),
+            ],
           ),
           child: Padding(
             padding: const EdgeInsets.all(15.0),

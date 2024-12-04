@@ -9,7 +9,12 @@ void main() {
       home: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.blue,
-            title: const Text('Expense App'),
+            title: const Text(
+              'Expense App',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
             actions: const [
               Modal()
             ],

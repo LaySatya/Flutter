@@ -14,4 +14,8 @@ class Expense {
   final ExpenseType type;
   Expense({required this.type, required this.title, required this.amount, required this.date})
       : id = uuid.v4();
+
+  void addExpense(){
+    
+  }
 }
