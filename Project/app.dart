@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
 import './screens/home_screen.dart';
-// import 'package:flutter_course/Course/Final-Project/screens/wholeapp.dart';
-// import 'package:flutter_course/Course/Final-Project/widgets/button.dart';
 import './widgets/button.dart';
 
 class JoyLearningApp extends StatelessWidget {

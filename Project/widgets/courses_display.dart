@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_course/Course/Final-Project/data/videos.dart';
 
 import '../models/courses.dart';
 import '../screens/coursevideo_screen.dart';
 
 
-class CourseDisplayScreen extends StatelessWidget {
-  const CourseDisplayScreen({
+class CourseDisplay extends StatelessWidget {
+  const CourseDisplay({
     super.key,
     required this.courseTitle,
     required this.courseImage,
-    required this.amountOfVideos,
     required this.courseCategories,
   });
   final String courseTitle;
   final String courseImage;
-  final String amountOfVideos;
   final Courses courseCategories;
+
+
+  // getter to get amount of videos
+  int get videoAmount {
+    int videosAmountByCourses = videos.where((video) => video.course.label == courseCategories.label).length;
+    return videosAmountByCourses;
+  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -35,15 +42,7 @@ class CourseDisplayScreen extends StatelessWidget {
             color: Colors.black38,
               borderRadius: BorderRadius.circular(10.0),
               border: Border.all(width: 2, color: Colors.grey.withOpacity(0.2)),
-              //  boxShadow: [
-              //     BoxShadow(
-              //       color: Colors.grey.withOpacity(0.2),
-              //       blurRadius: 10,
-              //       offset: const Offset(0, 4),
-              //     ),
-              //   ],
           ),
-              // margin: const EdgeInsets.fromLTRB(20, 20 , 20 ,1),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
@@ -60,7 +59,7 @@ class CourseDisplayScreen extends StatelessWidget {
                           style: const TextStyle(fontSize: 18.0),
                         ),
                         Text(
-                          '$amountOfVideos videos',
+                          '$videoAmount videos',
                           style: const TextStyle(fontSize: 14.0),
                         ),
                       ],

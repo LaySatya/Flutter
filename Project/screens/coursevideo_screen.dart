@@ -20,15 +20,22 @@ class CourseVideosScreen extends StatefulWidget {
 class _CourseVideosScreenState extends State<CourseVideosScreen> {
   late YoutubePlayerController _controller;
   String currentVideoUrl = '';
+  List<Videos> filteredVideos = [];
 
   @override
   void initState() {
     super.initState();
-    if (videos.isNotEmpty) {
+
+    // filter by category course
+    filteredVideos = videos
+        .where((video) => video.course.label == widget.courseCategories.label)
+        .toList();
+
+    if (filteredVideos.isNotEmpty) {
       currentVideoUrl = videos[0].videoUrl;
       _initializeController(currentVideoUrl);
     } else {
-      debugPrint('No videos available to play.');
+      debugPrint('This course has no videos available to play.');
     }
   }
 
@@ -69,69 +76,73 @@ class _CourseVideosScreenState extends State<CourseVideosScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        // Ensure the controller is initialized before checking isPlaying
-        if (_controller != null) {
-          _controller.pauseVideo(); // Pause the video before navigating back
-        }
-        return true; // Allow navigation
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.courseCategories.label),
-          centerTitle: true,
-        ),
-        body: Column(
-          children: [
-            // Main video player
-            if (videos.isNotEmpty &&
-                YoutubePlayerController.convertUrlToId(currentVideoUrl) != null)
-              YoutubePlayer(
-                controller: _controller,
-                aspectRatio: 16 / 9,
-              )
-            else
-              const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text(
-                    'No video available to play.',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.courseCategories.label),
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          // Main video player
+          if (filteredVideos.isNotEmpty &&
+              YoutubePlayerController.convertUrlToId(currentVideoUrl) != null)
+            YoutubePlayer(
+              controller: _controller,
+              aspectRatio: 16 / 9,
+            )
+          else
+            const Center(
+                // child: Padding(
+                //   padding: EdgeInsets.all(16.0),
+                //   child: Text(
+                //     'No video available to play.',
+                //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                //   ),
+                // ),
+                ),
+
+          const SizedBox(height: 10),
+
+          filteredVideos.isNotEmpty
+              ? Expanded(
+                  child: ListView.builder(
+                    itemCount: videos.length,
+                    itemBuilder: (context, index) {
+                      final video = videos[index];
+                      return VideoListItem(
+                        video: video,
+                        isPlaying: video.videoUrl == currentVideoUrl,
+                        onTap: () => _playVideo(video.videoUrl),
+                      );
+                    },
+                  ),
+                )
+              :
+              // const SizedBox(height: 20),
+              const Expanded(
+                  child: Center(
+                    child: Text(
+                      'No videos available for this course.',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.white38),
+                    ),
                   ),
                 ),
-              ),
-            const SizedBox(height: 10),
-            // Scrollable list of video episodes
-            Expanded(
-              child: ListView.builder(
-                itemCount: videos.length,
-                itemBuilder: (context, index) {
-                  final video = videos[index];
-                    return VideoListItem(
-                      video: video,
-                      isPlaying: video.videoUrl == currentVideoUrl,
-                      onTap: () => _playVideo(video.videoUrl),
-                    );
-                },
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }
 }
 
-
-
 class VideoListItem extends StatelessWidget {
   const VideoListItem({
-    Key? key,
+    super.key,
     required this.video,
     required this.isPlaying,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final Videos video;
   final bool isPlaying;
@@ -150,7 +161,7 @@ class VideoListItem extends StatelessWidget {
           child: const Icon(Icons.video_library),
         ),
         trailing: isPlaying
-           ? const Icon(Icons.pause, color: Colors.white)
+            ? const Icon(Icons.pause, color: Colors.white)
             : const Icon(Icons.play_arrow, color: Colors.white),
         title: Text(video.title),
         subtitle: Text(video.description),

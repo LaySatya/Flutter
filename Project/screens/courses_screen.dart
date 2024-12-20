@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../data/videos_data.dart';
 import '../models/courses.dart';
 import '../widgets/courses_display.dart';
 import './coursevideo_screen.dart';
@@ -37,10 +36,9 @@ class CoursesScreen extends StatelessWidget {
               //   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               // ),
               ...Courses.values.map(
-                (course) => CourseDisplayScreen(
+                (course) => CourseDisplay(
                   courseTitle: course.label,
                   courseImage: course.courseImage,
-                  amountOfVideos: videos.length.toString(),
                   courseCategories: course,
                 ),
               ),

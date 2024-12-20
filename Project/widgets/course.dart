@@ -30,10 +30,9 @@ class Course extends StatelessWidget {
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           ...Courses.values.map(
-            (course) => CourseDisplayScreen(
+            (course) => CourseDisplay(
               courseTitle: course.label,
               courseImage: course.courseImage,
-              amountOfVideos: videos.length.toString(),
               courseCategories: course,
             ),
           ),

@@ -7,6 +7,11 @@ import '../screens/coursevideo_screen.dart';
 class CoursesCard extends StatelessWidget {
   const CoursesCard({super.key});
 
+  int videoAmount (String courseCategories){
+    int videoAmount = videos.where((video) => video.course.label == courseCategories).length;
+    return videoAmount;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -56,7 +61,7 @@ class CoursesCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '${videos.length} Videos',
+                  '${videoAmount(course.label)} Videos',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 14,

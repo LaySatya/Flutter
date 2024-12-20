@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import './app.dart';
 String joyLogo = 'assets/FINAL-PROJECT-IMAGES/joy-logo.png';
 
