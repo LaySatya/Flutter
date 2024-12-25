@@ -5,74 +5,85 @@ import '../models/courses.dart';
 import '../screens/coursevideo_screen.dart';
 
 class CoursesCard extends StatelessWidget {
-  const CoursesCard({super.key});
+  const CoursesCard({
+    super.key,
+    required this.courseTitle,
+    required this.courseImage,
+    required this.courseCategories,
+  });
 
-  int videoAmount (String courseCategories){
-    int videoAmount = videos.where((video) => video.course.label == courseCategories).length;
-    return videoAmount;
+  final String courseTitle;
+  final String courseImage;
+  final Courses courseCategories;
+
+  // Getter to get the amount of videos each course has
+  int get videoAmount {
+    final matchingVideos = videos.where((video) {
+      return video.course == courseCategories;
+    }).toList();
+    return matchingVideos.length;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 35,
-      runSpacing: 16,
-      alignment: WrapAlignment.spaceBetween,
-      children: Courses.values.map((course) {
-        // final List<Videos> videos;
-        return InkWell(
-          hoverColor: Colors.white10,
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => CourseVideosScreen(courseCategories: course),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 1),
+      child: InkWell(
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => CourseVideosScreen(
+              courseCategories: courseCategories,
             ),
           ),
-          child: Container(
-            width: 210, // Set a fixed width for each card
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.black54,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black38,
+            borderRadius: BorderRadius.circular(10.0),
+            border: Border.all(
+              width: 2,
+              color: Colors.grey.withOpacity(0.2),
             ),
-            child: Column(
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.network(
-                  course.courseImage,
+                Image.asset(
+                  courseImage,
                   height: 100,
                   width: 100,
                   fit: BoxFit.cover,
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  course.label,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '${videoAmount(course.label)} Videos',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        courseTitle,
+                        style: const TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8.0),
+                      Text(
+                        '${videoAmount} videos',
+                        style: const TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-        );
-      }).toList(),
+        ),
+      ),
     );
   }
 }

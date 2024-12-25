@@ -26,16 +26,16 @@ final videos = [
    Videos(
     id: '4',
     videoUrl: 'https://www.youtube.com/embed/s9IGygW9HWY?si=0Ym9NKSBtfFxWPiz',
-    title: 'Geometry',
-    description: 'Learn the basics of geometry.',
+    title: 'A over B, B oposite 0',
+    description: 'Learn basic math to pro.',
     course: Courses.mathematic,
   ),
   // Add more 
   Videos(
     id: '5',
     videoUrl: 'https://www.youtube.com/embed/dg-uDiaKfE0?si=Hzr6m2hFnWCXj9pp',
-    title: 'Geometry',
-    description: 'Learn the basics of geometry.',
+    title: 'Equation',
+    description: 'Quandratic Equation',
     course: Courses.mathematic,
   ),
   // English Course Videos
@@ -43,41 +43,38 @@ final videos = [
 Videos(
   id: '6',
   videoUrl: 'https://www.youtube.com/watch?v=ig3irLa0eu0',
-  title: 'Learn English: 100 Beginner English Videos You Must Watch',
-  description: 'A comprehensive collection of beginner English lessons.',
+  title: 'Learn English',
+  description: 'beginner English lessons.',
   course: Courses.english,
 ),
 Videos(
   id: '7',
   videoUrl: 'https://www.youtube.com/watch?v=mbtoLCODbZc',
-  title: 'Top 10 YouTube channels to improve your English skills',
-  description: 'Discover the best YouTube channels for enhancing your English.',
+  title: 'Improve your English skills',
+  description: 'YouTube channels for enhancing your English.',
   course: Courses.english,
 ),
 Videos(
   id: '8',
-  videoUrl: 'https://www.youtube.com/watch?v=Ej_Pcr4uC2Q',
-  title: 'Dart Programming Tutorial - Full Course',
-  description: 'Learn the Dart programming language in this full tutorial for beginners.',
-  course: Courses.dart,
+  videoUrl: 'https://youtu.be/OoO5d5P0Jn4?si=kJ8lLZKD1SgFzlmC',
+  title: 'Crash Course Physics Preview',
+  description: 'Physics is coming soon.',
+  course: Courses.physic,
 ),
 Videos(
   id: '9',
-  videoUrl: 'https://www.youtube.com/watch?v=JZukfxvc7Mc',
-  title: 'Learn The Dart Programming Language - Complete Free Course!',
-  description: 'A complete free course on the Dart programming language.',
-  course: Courses.dart,
+  videoUrl: 'https://youtu.be/OoO5d5P0Jn4?si=b3ROQHBLdkQtpUZj',
+  title: 'Motion in a Straight Line: Crash Course Physics #1',
+  description: '',
+  course: Courses.physic,
 ),
 Videos(
   id: '10',
-  videoUrl: 'https://www.youtube.com/watch?v=igauQ_rF_bU',
-  title: 'Dart programming full course for beginners and advanced',
-  description: 'A comprehensive Dart programming course for all levels.',
-  course: Courses.dart,
+  videoUrl: 'https://youtu.be/ObHJJYvu3RE?si=h8cVbGQBHR7VrC76',
+  title: 'Derivatives: Crash Course Physics #2',
+  description: 'learn derivatives!',
+  course: Courses.physic,
 ),
-
-
-
 
 
 ];

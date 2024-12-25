@@ -43,7 +43,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
         fillColor: Colors.black38,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey),
+          borderSide: const BorderSide(color: Colors.grey),
           
         ),
         border: OutlineInputBorder(
@@ -55,14 +55,12 @@ class _SearchTextFieldState extends State<SearchTextField> {
         contentPadding: const EdgeInsets.symmetric(vertical: 14.0),
       ),
        onChanged: (value) {
-        widget.onSearch(value); // Trigger search on text change
+        widget.onSearch(value); 
       },
       onSubmitted: (value) {
-        widget.onSearch(value); // Trigger search on text submit
+        widget.onSearch(value); 
       },
 
-      //   // Add search logic here
-      // },
     );
   }
 }

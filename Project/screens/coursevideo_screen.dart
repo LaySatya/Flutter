@@ -9,9 +9,11 @@ class CourseVideosScreen extends StatefulWidget {
   const CourseVideosScreen({
     Key? key,
     required this.courseCategories,
+    this.initialVideo,
   }) : super(key: key);
 
   final Courses courseCategories;
+  final String? initialVideo;
 
   @override
   State<CourseVideosScreen> createState() => _CourseVideosScreenState();
@@ -26,13 +28,13 @@ class _CourseVideosScreenState extends State<CourseVideosScreen> {
   void initState() {
     super.initState();
 
-    // filter by category course
+    // Filter videos by course label
     filteredVideos = videos
         .where((video) => video.course.label == widget.courseCategories.label)
         .toList();
 
     if (filteredVideos.isNotEmpty) {
-      currentVideoUrl = videos[0].videoUrl;
+      currentVideoUrl = widget.initialVideo ?? filteredVideos[0].videoUrl;
       _initializeController(currentVideoUrl);
     } else {
       debugPrint('This course has no videos available to play.');
@@ -50,7 +52,8 @@ class _CourseVideosScreenState extends State<CourseVideosScreen> {
         ),
       );
       _controller.loadVideoById(
-          videoId: videoId); // Load the video after initializing
+        videoId: videoId,
+      );
     } else {
       debugPrint('Invalid initial video URL: $videoUrl');
     }
@@ -58,7 +61,7 @@ class _CourseVideosScreenState extends State<CourseVideosScreen> {
 
   @override
   void dispose() {
-    _controller.close(); // Properly clean up resources
+    _controller.close();
     super.dispose();
   }
 
@@ -91,42 +94,32 @@ class _CourseVideosScreenState extends State<CourseVideosScreen> {
               aspectRatio: 16 / 9,
             )
           else
-            const Center(
-                // child: Padding(
-                //   padding: EdgeInsets.all(16.0),
-                //   child: Text(
-                //     'No video available to play.',
-                //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                //   ),
-                // ),
-                ),
+            const Center(child: CircularProgressIndicator()),
 
           const SizedBox(height: 10),
 
           filteredVideos.isNotEmpty
               ? Expanded(
                   child: ListView.builder(
-                    itemCount: videos.length,
+                    itemCount: filteredVideos.length,
                     itemBuilder: (context, index) {
-                      final video = videos[index];
+                      final video = filteredVideos[index];
                       return VideoListItem(
                         video: video,
                         isPlaying: video.videoUrl == currentVideoUrl,
                         onTap: () => _playVideo(video.videoUrl),
+                        onFavoriteToggle: () => setState(() {
+                          video.toggleFavorite();
+                        }),
                       );
                     },
                   ),
                 )
-              :
-              // const SizedBox(height: 20),
-              const Expanded(
+              : const Expanded(
                   child: Center(
                     child: Text(
                       'No videos available for this course.',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
-                          color: Colors.white38),
+                      style: TextStyle(fontSize: 16, color: Colors.white38),
                     ),
                   ),
                 ),
@@ -142,11 +135,13 @@ class VideoListItem extends StatelessWidget {
     required this.video,
     required this.isPlaying,
     required this.onTap,
+    required this.onFavoriteToggle,
   });
 
   final Videos video;
   final bool isPlaying;
   final VoidCallback onTap;
+  final VoidCallback onFavoriteToggle;
 
   @override
   Widget build(BuildContext context) {
@@ -160,11 +155,27 @@ class VideoListItem extends StatelessWidget {
           color: Colors.grey.shade300,
           child: const Icon(Icons.video_library),
         ),
-        trailing: isPlaying
-            ? const Icon(Icons.pause, color: Colors.white)
-            : const Icon(Icons.play_arrow, color: Colors.white),
         title: Text(video.title),
         subtitle: Text(video.description),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(
+                video.isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: video.isFavorite ? Colors.red : Colors.grey,
+              ),
+              onPressed: onFavoriteToggle, // Toggle favorite when pressed
+            ),
+            IconButton(
+              icon: isPlaying
+                  ? const Icon(Icons.pause)
+                  : const Icon(Icons.play_arrow),
+              color: Colors.white,
+              onPressed: onTap,
+            ),
+          ],
+        ),
         onTap: onTap,
       ),
     );

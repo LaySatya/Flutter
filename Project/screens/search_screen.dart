@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_course/Course/Project/models/courses.dart';
-
+import 'package:flutter_course/Course/Project/widgets/courses_display.dart';
 import '../widgets/search.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -18,16 +18,17 @@ class _SearchScreenState extends State<SearchScreen> {
     setState(() {
       searchQuery = query;
       if (query.isEmpty) {
-        filteredCourses = [];  // show all courses when no query is provided
+        filteredCourses = [];
       } else {
-        // filter courses based on query
+        // Filter courses based on the search query
         filteredCourses = Courses.values
             .where((course) =>
                 course.label.toLowerCase().contains(query.toLowerCase()))
-            .toList(); 
+            .toList();
       }
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,67 +44,32 @@ class _SearchScreenState extends State<SearchScreen> {
       body: Column(
         children: [
           Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: SearchTextField(onSearch: _performSearch)),
+            padding: const EdgeInsets.all(12.0),
+            child: SearchTextField(onSearch: _performSearch),
+          ),
           const SizedBox(height: 30),
-          filteredCourses.isNotEmpty ? Expanded(
-            child: ListView.builder(
-              itemCount: filteredCourses.length,
-              itemBuilder: (context, index) {
-                final course = filteredCourses[index];
-                return Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 1),
-            child: InkWell(
-              // onTap: () => Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (context) => CourseVideosScreen(
-              //       courseCategories: C,
-              //     ),
-              //   ),
-              // ),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.black38,
-                  borderRadius: BorderRadius.circular(10.0),
-                  border:
-                      Border.all(width: 2, color: Colors.grey.withOpacity(0.2)),
+          filteredCourses.isNotEmpty
+              ? Expanded(
+                  child: ListView.builder(
+                    itemCount: filteredCourses.length,
+                    itemBuilder: (context, index) {
+                      final course = filteredCourses[index];
+                      return CourseDisplay(
+                        courseTitle: course.label,
+                        courseImage: course.courseImage,
+                        courseCategories: course,
+                      );
+                    },
+                  ),
+                )
+              : const Expanded(
+                  child: Center(
+                    child: Text(
+                      'No courses found',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ),
-                child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          course.courseImage,
-                          height: 100
-                        ),
-                        const SizedBox(width: 8.0),
-                        Column(
-                          children: [
-                            Text(
-                              course.label,
-                              style: const TextStyle(fontSize: 18.0),
-                            ),
-                            Text(
-                              '5 videos',
-                              style: const TextStyle(fontSize: 14.0),
-                            ),
-                          ],
-                        )
-                      ],
-                    )),
-              ),
-            ),
-          );
-              }
-            )
-          ) : const Expanded(
-            child: Center(
-              child: Text(
-                'No courses found',
-                style: TextStyle(color: Colors.white),
-              ),
-            )
-          )
         ],
       ),
     );

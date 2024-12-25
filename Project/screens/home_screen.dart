@@ -1,14 +1,23 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_course/Course/Project/screens/favorites_screen.dart';
+import 'package:flutter_course/Course/Project/widgets/course_category.dart';
 
 import '../data/carousel_images.dart';
+import '../models/courses.dart';
 import '../screens/search_screen.dart';
-import '../widgets/course_category.dart';
 import './courses_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.appLogo});
   final String appLogo;
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _currentIndex = 0; // For tracking the current selected tab
 
   @override
   Widget build(BuildContext context) {
@@ -17,26 +26,22 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Image.asset(
-          appLogo,
+          widget.appLogo,
           fit: BoxFit.contain,
           height: 100,
         ),
         actions: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SearchScreen(),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.search),
-                color: Colors.white,
-              ),
-            ],
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SearchScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.search),
+            color: Colors.white,
           ),
         ],
       ),
@@ -108,57 +113,72 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-        
-            // Course Cards
+
+            // Display courses
             LayoutBuilder(
               builder: (context, constraints) {
-                return const CoursesCard();
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: Courses.values.length,
+                  itemBuilder: (context, index) {
+                    final course = Courses.values[index];
+                    return CoursesCard(
+                      courseTitle: course.label,
+                      courseImage: course.courseImage,
+                      courseCategories: course,
+                    );
+                  },
+                );
               },
             ),
             const SizedBox(height: 20),
-            // Course Categories
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-
+        currentIndex: _currentIndex, // Handle bottom navigation tab highlight
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-
-            icon: const Icon(Icons.home),
+            icon: Icon(Icons.home),
             label: 'Home',
-            backgroundColor: Colors.blue[800],
+            backgroundColor: Colors.black38,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.play_lesson_sharp),
+            icon: Icon(Icons.play_lesson_sharp),
             label: 'Courses',
-            backgroundColor: Colors.blue[800],
+            backgroundColor: Colors.black38,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.settings),
-            label: 'Settings',
-            backgroundColor: Colors.blue[800],
+            icon: Icon(Icons.favorite),
+            label: 'Favorites',
+            backgroundColor: Colors.black38,
           ),
-          
+        
         ],
         onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+
           if (index == 0) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => HomeScreen(appLogo: appLogo)),
+              MaterialPageRoute(builder: (context) => HomeScreen(appLogo: widget.appLogo)),
             );
           } else if (index == 1) {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const CoursesScreen()),
             );
-          } else if (index == 2) {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => SettingsPage()),
-            // );
           }
-        }
+          else if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const FavoriteVideoListScreen()),
+            );
+          }
+        },
       ),
     );
   }

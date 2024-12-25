@@ -2,20 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../models/courses.dart';
 import '../widgets/courses_display.dart';
-import './coursevideo_screen.dart';
 
-
-class CoursesScreen extends StatelessWidget {
+class CoursesScreen extends StatefulWidget {
   const CoursesScreen({super.key});
 
-  void onTap(Courses courseCategory, BuildContext context) {
-    // Navigate to the course details screen with the selected course
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => CourseVideosScreen(courseCategories: courseCategory),
-      ),
-    );
-  }
+  @override
+  _CoursesScreenState createState() => _CoursesScreenState();
+}
+
+class _CoursesScreenState extends State<CoursesScreen> {
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +20,11 @@ class CoursesScreen extends StatelessWidget {
           centerTitle: true,
           title: const Text('Courses'),
         ),
-        // Add a floating action button to add new courses
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // const SizedBox(height: 20),
-              // const Text(
-              //   'Course',
-              //   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              // ),
+              // Iterate through the list of courses and display each one
               ...Courses.values.map(
                 (course) => CourseDisplay(
                   courseTitle: course.label,
